@@ -7,6 +7,14 @@ public class Song {
 	private String label;
 	private int released;
 
+	public Song(int id, String title, String artist, String label, int released) {
+		this.id = id;
+		this.title = title;
+		this.artist = artist;
+		this.label = label;
+		this.released = released;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -45,5 +53,10 @@ public class Song {
 
 	public void setReleased(int released) {
 		this.released = released;
+	}
+
+	@Override
+	public String toString() {
+		return "Song{" + "id=" + id + ", title='" + title + '\'' + ", artist='" + artist + '\'' + ", label='" + label + '\'' + ", released=" + released + '}';
 	}
 }
