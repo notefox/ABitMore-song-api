@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SongController {
 
 	public static SongController instance = new SongController();
-	private final List<Song> songs = new ArrayList<>();
+	private List<Song> songs = new ArrayList<>();
 
 	private static Gson gson = new Gson();
 
@@ -33,7 +34,7 @@ public class SongController {
 		});
 		String lines = allLines.get().replaceAll("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)", "");
 		Song[] loadedIn = gson.fromJson(lines, Song[].class);
-
+		songs = Arrays.stream(loadedIn).collect(Collectors.toList());
 	}
 
 	public Song getSpecificSong(int id) {
