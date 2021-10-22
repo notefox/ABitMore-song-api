@@ -1,3 +1,5 @@
 package com.abitmorecode.songrest;
 
-public class SongController {}
+public class SongController {
+
+}
