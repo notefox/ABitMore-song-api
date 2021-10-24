@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,12 +29,21 @@ public class SongController {
 	private static boolean INITIALIZED = false;
 	private static Gson gson = new Gson();
 
+	/**
+	 * private constructor for Singleton pattern
+	 */
+	private SongController() {}
 
 	/**
-	 * init a json via a filename
+	 * init a json via a file (filepath)
+	 *
+	 * on corrupted/malformed json, it will either ignore it/throw an error it if the file still
+	 *
+	 * inherits basic structure, or throws a RuntimeException
+	 *
 	 * @param filepath file path to json file
 	 * @throws IOException thrown, if file doesn't exist or file can't be read
-	 * @throws AlreadyInitializedException thrown, if songs already inherits Songs
+	 * @throws AlreadyInitializedException thrown, if Controller is already initialized
 	 */
 	public void init(String filepath) throws IOException, AlreadyInitializedException {
 		// check if songs already initialized
@@ -50,10 +60,31 @@ public class SongController {
 		String lines = allLines.get().replaceAll("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)", "");
 
 		// format Json into Array of Songs
-		Song[] loadedIn = gson.fromJson(lines, Song[].class);
+		Song[] loadedIn;
+		// init empty array, if no object was found / loaded in
+		// TODO: use Logger to inform about that
+		if((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
+			loadedIn = new Song[]{};
+		}
 
-		// create ArrayList out of the Array
-		songs = Arrays.stream(loadedIn).collect(Collectors.toList());
+		// remove any Song with null in parameters
+		// TODO: use Logger to inform about that
+		List<Song> nullList = Arrays.stream(loadedIn).filter(Song::anyNull).collect(Collectors.toList());
+		List<Song> clonedList = Arrays.stream(loadedIn).collect(Collectors.toList());
+		clonedList.removeAll(nullList);
+
+		// set the cleaned List as the officially running Song List
+		songs = clonedList;
+
+		// set init tag to true
+		INITIALIZED = true;
+	}
+
+	/**
+	 * initialize with nothing in Song List
+	 */
+	void init() {
+		// set init tag to true
 		INITIALIZED = true;
 	}
 

@@ -1,5 +1,7 @@
 package com.abitmorecode.songrest;
 
+import org.springframework.lang.NonNull;
+
 /**
  * Song Class
  */
@@ -18,7 +20,7 @@ public class Song {
 	 * @param label Label Name String
 	 * @param released Release Year int
 	 */
-	public Song(int id, String title, String artist, String label, int released) {
+	public Song(@NonNull int id, @NonNull String title, @NonNull String artist, @NonNull String label, @NonNull int released) {
 		this.id = id;
 		this.title = title;
 		this.artist = artist;
@@ -64,6 +66,10 @@ public class Song {
 
 	public void setReleased(int released) {
 		this.released = released;
+	}
+
+	public boolean anyNull() {
+		return true;
 	}
 
 	/**
