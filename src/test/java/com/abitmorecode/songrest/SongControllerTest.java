@@ -63,13 +63,14 @@ class SongControllerTest {
 			fail();
 		}
 
-		Song[] songs = new Song[0];
+		Song[] songs = new Song[]{};
 		try {
 			songs = SongController.instance.getAllSongs();
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
-		assertEquals(new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015).toString(), songs[1].toString());
+
+		assertEquals(new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015), songs[0]);
 	}
 
 	@Test
@@ -105,15 +106,15 @@ class SongControllerTest {
 
 	@Test
 	void addASimpleSong() {
-		init();
-		Song song = new Song(2, "tite", "artist", "label", 2020);
+		SongController.instance.init();
+		Song song = new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015);
 		try {
 			SongController.instance.addSong(song);
 		} catch (SameSongAlreadyExistException | SongController.NotYetInitializedException e) {
 			fail();
 		}
 		try {
-			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get().toString(), song.toString());
+			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get(), song);
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
@@ -121,15 +122,17 @@ class SongControllerTest {
 
 	@Test
 	void addASongWithOriginalParamList() {
-		init();
-		Song song = new Song(2, "tite", "artist", "label", 2020);
+		SongController.instance.init();
+		Song song = new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015);
 		try {
-			SongController.instance.addSong(2, "tite", "artist", "label", 2020);
-		} catch (SongController.NotYetInitializedException | SongIdAlreadyExistException e) {
+			SongController.instance.addSong(song);
+		} catch (SongController.NotYetInitializedException e) {
 			fail();
+		} catch (SameSongAlreadyExistException e) {
+			e.printStackTrace();
 		}
 		try {
-			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get().toString(), song.toString());
+			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get(), song);
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
