@@ -1,5 +1,6 @@
 package com.abitmorecode.songrest;
 
+import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,11 +27,23 @@ public class SongrestApplication {
 			// TODO: HTMLresponse with error code
 			return "";
 		}
-		return gson.toJson(SongController.instance.getSpecificSong(songId));
+		try {
+			return gson.toJson(SongController.instance.getSpecificSong(songId));
+		} catch (SongDoesntExistException | SongController.NotYetInitializedException e) {
+			// TODO: use Logger added later
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 
 	@GetMapping("/ABitMoreCode/songs")
 	public String getSongs(){
-		return gson.toJson(SongController.instance.getAllSongs());
+		try {
+			return gson.toJson(SongController.instance.getAllSongs());
+		} catch (SongController.NotYetInitializedException e) {
+			// TODO: use Logger added later
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 }

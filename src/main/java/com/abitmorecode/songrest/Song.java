@@ -1,5 +1,8 @@
 package com.abitmorecode.songrest;
 
+/**
+ * Song Class
+ */
 public class Song {
 	private int id;
 	private String title;
@@ -7,6 +10,14 @@ public class Song {
 	private String label;
 	private int released;
 
+	/**
+	 * Song constructor
+	 * @param id id int
+	 * @param title Song title String
+	 * @param artist Artist Name String
+	 * @param label Label Name String
+	 * @param released Release Year int
+	 */
 	public Song(int id, String title, String artist, String label, int released) {
 		this.id = id;
 		this.title = title;
@@ -55,6 +66,10 @@ public class Song {
 		this.released = released;
 	}
 
+	/**
+	 * custom to String
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Song{" + "id=" + id + ", title='" + title + '\'' + ", artist='" + artist + '\'' + ", label='" + label + '\'' + ", released=" + released + '}';
