@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,7 +84,23 @@ class SongControllerTest {
 
 	@Test
 	void fileHasWrongJsonInItTest() {
-		assertThrows(JsonParseException.class, () -> SongController.instance.init(weirdpath));
+		try {
+			SongController.instance.init(weirdpath);
+		} catch (IOException | SongController.AlreadyInitializedException e) {
+			fail();
+		}
+		try {
+			assertArrayEquals(SongController.instance.getAllSongs(), new Song[]{});
+		} catch (SongController.NotYetInitializedException e) {
+			fail();
+		}
+	}
+
+	@Test
+	void resetTest() {
+		init();
+		SongController.instance.reset();
+		assertThrows(SongController.NotYetInitializedException.class, () -> SongController.instance.getAllSongs());
 	}
 
 	@Test
