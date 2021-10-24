@@ -69,7 +69,7 @@ public class Song {
 	}
 
 	public boolean anyNull() {
-		return true;
+		return id == 0 || title == null || artist == null || label == null || released == 0 ;
 	}
 
 	/**
