@@ -20,7 +20,7 @@ public class SongrestApplication {
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
 	public String getSong(@PathVariable String id){
-		int songId = 0;
+		int songId;
 		try {
 			songId = Integer.parseInt(id);
 		}catch(NumberFormatException e){
