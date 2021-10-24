@@ -23,10 +23,11 @@ public class SongrestApplication {
 		int songId;
 		try {
 			songId = Integer.parseInt(id);
-		}catch(NumberFormatException e){
+		} catch(NumberFormatException e) {
 			// TODO: HTMLresponse with error code
 			return "";
 		}
+
 		try {
 			return gson.toJson(SongController.instance.getSpecificSong(songId));
 		} catch (SongDoesntExistException | SongController.NotYetInitializedException e) {
