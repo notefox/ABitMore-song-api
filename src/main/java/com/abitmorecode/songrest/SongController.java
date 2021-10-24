@@ -221,10 +221,6 @@ public class SongController {
 		return songs.stream().anyMatch(s -> (Objects.equals(s.toString(), song.toString())));
 	}
 
-	/**
-	 * Exception-thrower if local SongController was initialized
-	 * @throws NotYetInitializedException
-	 */
 	private void checkIfAlreadyInitialized() throws NotYetInitializedException {
 		if (!INITIALIZED) {
 			throw new NotYetInitializedException();
