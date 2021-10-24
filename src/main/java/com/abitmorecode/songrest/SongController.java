@@ -5,6 +5,7 @@ import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistExcep
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.google.gson.Gson;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 /**
  * Song Controller (Singleton)
  */
+@RestController
 public class SongController {
 
 	public static SongController instance = new SongController();
