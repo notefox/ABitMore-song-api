@@ -80,4 +80,34 @@ public class Song {
 	public String toString() {
 		return "Song{" + "id=" + id + ", title='" + title + '\'' + ", artist='" + artist + '\'' + ", label='" + label + '\'' + ", released=" + released + '}';
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Song song = (Song) o;
+
+		if (id != song.id)
+			return false;
+		if (released != song.released)
+			return false;
+		if (!title.equals(song.title))
+			return false;
+		if (!artist.equals(song.artist))
+			return false;
+		return label.equals(song.label);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + title.hashCode();
+		result = 31 * result + artist.hashCode();
+		result = 31 * result + label.hashCode();
+		result = 31 * result + released;
+		return result;
+	}
 }
