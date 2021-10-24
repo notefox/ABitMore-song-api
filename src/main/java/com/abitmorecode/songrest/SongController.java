@@ -202,7 +202,7 @@ public class SongController {
 	 * @return int id
 	 */
 	private int getLastId() {
-		return songs.stream().min((s1, s2) -> Math.max(s1.getId(), s2.getId())).get().getId();
+		return songs.stream().max((s1, s2) -> Math.max(s1.getId(), s2.getId())).get().getId();
 	}
 
 	/**
