@@ -127,7 +127,7 @@ public class SongController {
 	 * @param label Label of Song
 	 * @param released Song Release Year
 	 */
-	public void addSong(@NonNull String title, @NonNull String artist, @NonNull String label, @NonNull int released) throws NotYetInitializedException {
+	public void addSong(String title, String artist,  String label, int released) throws NotYetInitializedException {
 		checkIfAlreadyInitialized();
 		int id = getLastId() + 1;
 		Song newSong = new Song(id, title, artist, label, released);
