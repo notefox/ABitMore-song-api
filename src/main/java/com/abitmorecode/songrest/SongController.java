@@ -26,7 +26,7 @@ public class SongController {
 	private List<Song> songs = new ArrayList<>();
 
 	private static boolean INITIALIZED = false;
-	private static Gson gson = new Gson();
+	private static final Gson gson = new Gson();
 
 	/**
 	 * private constructor for Singleton pattern
