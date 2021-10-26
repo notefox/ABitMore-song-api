@@ -113,7 +113,7 @@ public class SongController {
 
 	/**
 	 * getter for all Songs
-	 * @return Array of all songs
+	 * @return List of all songs
 	 */
 	public Song[] getAllSongs() throws NotYetInitializedException {
 		checkIfAlreadyInitialized();
@@ -151,7 +151,7 @@ public class SongController {
 	}
 
 	/**
-	 * adds a Song with id
+	 * adds a Song Object
 	 * @param song Song
 	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
 	 */
