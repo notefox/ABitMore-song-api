@@ -63,14 +63,14 @@ class SongControllerTest {
 			fail();
 		}
 
-		Song[] songs = new Song[]{};
+		List<Song> songs = null;
 		try {
 			songs = SongController.instance.getAllSongs();
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
 
-		assertEquals(new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015), songs[0]);
+		assertEquals(new Song(2, "Das Test", "N bisschen Test", "TestTestTest", 2015), songs.toArray()[0]);
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class SongControllerTest {
 			fail();
 		}
 		try {
-			assertArrayEquals(SongController.instance.getAllSongs(), new Song[]{});
+			assertArrayEquals(SongController.instance.getAllSongs().toArray(), new Song[]{});
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
@@ -114,7 +114,7 @@ class SongControllerTest {
 			fail();
 		}
 		try {
-			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get(), song);
+			assertEquals(SongController.instance.getAllSongs().stream().findFirst().get(), song);
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
@@ -132,7 +132,7 @@ class SongControllerTest {
 			e.printStackTrace();
 		}
 		try {
-			assertEquals(Arrays.stream(SongController.instance.getAllSongs()).findFirst().get(), song);
+			assertEquals(SongController.instance.getAllSongs().stream().findFirst().get(), song);
 		} catch (SongController.NotYetInitializedException e) {
 			fail();
 		}
