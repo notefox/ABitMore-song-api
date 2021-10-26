@@ -1,13 +1,11 @@
 package com.abitmorecode.songrest;
 
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
-import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.google.gson.Gson;
-import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
