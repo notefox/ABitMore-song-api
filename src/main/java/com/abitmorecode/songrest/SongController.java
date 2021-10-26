@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 /**
  * Song Controller (Singleton)
  */
-@RestController
+
 public class SongController {
 
 	public static SongController instance = new SongController();
