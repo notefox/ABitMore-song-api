@@ -115,25 +115,9 @@ public class SongController {
 	 * getter for all Songs
 	 * @return List of all songs
 	 */
-	public Song[] getAllSongs() throws NotYetInitializedException {
+	public List<Song> getAllSongs() throws NotYetInitializedException {
 		checkIfAlreadyInitialized();
-		return songs.toArray(new Song[]{});
-	}
-
-
-	/**
-	 * adds a Song with default Song Parameter list
-	 *
-	 * @see Song
-	 * @throws SongIdAlreadyExistException thrown, if id is already in use
-	 */
-	public void addSong(@NonNull int id, @NonNull String title, @NonNull String artist, @NonNull String label, @NonNull int released) throws SongIdAlreadyExistException, NotYetInitializedException {
-		checkIfAlreadyInitialized();
-		if (idAlreadyExist(id)) {
-			throw new SongIdAlreadyExistException("id: " + id + " already exist");
-		}
-		Song newSong = new Song(id, title, artist, label, released);
-		songs.add(newSong);
+		return songs;
 	}
 
 	/**
