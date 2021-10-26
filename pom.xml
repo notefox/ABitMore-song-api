@@ -13,7 +13,8 @@
 	<artifactId>songrest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>songrest</name>
-	<description>Hi :)</description>
+	<description>Song List API</description>
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>
