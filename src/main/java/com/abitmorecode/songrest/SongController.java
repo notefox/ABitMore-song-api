@@ -145,6 +145,7 @@ public class SongController {
 		if (songAlreadyExist(song)) {
 			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
 		}
+		// TODO: check if song id already exists
 		songs.add(song);
 	}
 
