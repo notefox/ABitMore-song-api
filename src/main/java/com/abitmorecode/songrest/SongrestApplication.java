@@ -1,12 +1,11 @@
 package com.abitmorecode.songrest;
 
+import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @RestController
@@ -19,15 +18,7 @@ public class SongrestApplication {
 	}
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
-	public String getSong(@PathVariable String id){
-		int songId;
-		try {
-			songId = Integer.parseInt(id);
-		} catch(NumberFormatException e) {
-			// TODO: HTMLresponse with error code
-			return "";
-		}
-
+	public String getSong(@PathVariable int songId){
 		try {
 			return gson.toJson(SongController.instance.getSpecificSong(songId));
 		} catch (SongDoesntExistException | SongController.NotYetInitializedException e) {
@@ -46,5 +37,36 @@ public class SongrestApplication {
 			e.printStackTrace();
 			return e.toString();
 		}
+	}
+
+	@PostMapping("/ABitMoreCode/songs")
+	public Song postSong(@RequestBody Song song){
+		try {
+			SongController.instance.addSong(song);
+			return song;
+		} catch (SameSongAlreadyExistException e) {
+			e.printStackTrace();
+			return null;
+		} catch (SongController.NotYetInitializedException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@DeleteMapping("/ABitMoreCode/songs/{id}")
+	public int deleteSong(@PathVariable int songId){
+		try {
+			SongController.instance.deleteSong(songId);
+			return songId;
+		} catch (SongDoesntExistException e) {
+			e.printStackTrace();
+		} catch (SongController.NotYetInitializedException e) {
+			e.printStackTrace();
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		// TODO: HTML response with error code
+		return -1;
 	}
 }
