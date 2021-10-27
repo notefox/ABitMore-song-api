@@ -1,4 +1,4 @@
-package com.abitmorecode.songrest;
+package com.abitmorecode.songrest.Models;
 
 import org.springframework.lang.NonNull;
 
@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
  * Song Class
  */
 public class Song {
+
 	private int id;
 	private String title;
 	private String artist;
