@@ -1,4 +1,4 @@
-package com.abitmorecode;
+package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
 import com.abitmorecode.songrest.Services.SongService;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SongServiceTest {
 
 	@SuppressWarnings("FieldCanBeLocal")
-	private final String path = "src/test/java/com/abitmorecode/test_json/";
+	private final String path = "src/test/java/com/abitmorecode/songrest/test_json/";
 
 	private String correctpath;
 	private String wrongpath;
@@ -48,9 +48,11 @@ class SongServiceTest {
 
 	@Test
 	void basicInitializeTest() {
-		SongsManager songService = null;
+		SongService songService = null;
 		try {
-			songService = new SongService(correctpath);
+			songService = new SongService();
+			songService.reset();
+			songService.init(correctpath);
 		} catch (IOException e) {
 			fail();
 		}
@@ -62,19 +64,24 @@ class SongServiceTest {
 
 	@Test
 	void pathNotFoundTest() {
-		final SongsManager[] songService = new SongService[1];
-		assertThrows(NoSuchFileException.class, () -> songService[0] = new SongService(nonepath));
+		final SongService songService = new SongService();
+		assertThrows(NoSuchFileException.class, () -> songService.init(nonepath));
 	}
 
 	@Test
 	void fileHasNoJsonInItTest() {
-		final SongsManager[] songService = new SongService[1];
-		assertThrows(JsonParseException.class, () -> songService[0] = new SongService(wrongpath));
+		final SongService songService = new SongService();
+		assertThrows(JsonParseException.class, () -> songService.init(wrongpath));
 	}
 
 	@Test
-	void fileHasWrongJsonInItTest() throws IOException {
-		SongsManager  songService = new SongService(weirdpath);
+	void fileHasWrongJsonInItTest() {
+		SongService songService = new SongService();
+		try {
+			songService.init(weirdpath);
+		} catch (IOException e) {
+			fail();
+		}
 		assert songService.getAllSongs().isEmpty();
 	}
 

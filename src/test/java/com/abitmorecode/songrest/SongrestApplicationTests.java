@@ -1,4 +1,4 @@
-package com.abitmorecode;
+package com.abitmorecode.songrest;
 
 import com.abitmorecode.songrest.Controller.SongController;
 import org.junit.jupiter.api.BeforeAll;
