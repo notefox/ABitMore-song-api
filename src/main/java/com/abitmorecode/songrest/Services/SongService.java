@@ -56,7 +56,7 @@ public class SongService implements SongsManager {
 	 *
 	 * @throws IOException                 thrown, if file doesn't exist or file can't be read
 	 */
-	private void init(String filepath) throws IOException {
+	public void init(String filepath) throws IOException {
 		// load in string
 		Stream<String> linesStream = Files.lines(Path.of(filepath));
 		AtomicReference<String> allLines = new AtomicReference<>("");
