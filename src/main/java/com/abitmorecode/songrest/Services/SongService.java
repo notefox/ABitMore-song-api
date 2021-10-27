@@ -138,12 +138,16 @@ public class SongService implements SongsManager {
 	public void addSong(String json) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
 		Song song = gson.fromJson(json, Song.class);
 		// check if Song already exist
+
+		//noinspection DuplicatedCode
 		if (songAlreadyExist(song)) {
 			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
 		}
+
 		if (idAlreadyExist(song.getId())) {
 			throw new SongIdAlreadyExistException();
 		}
+
 		synchronized (songs) {
 			songs.add(song);
 		}
