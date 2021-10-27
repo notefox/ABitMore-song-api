@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SongRestApplication {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(SongRestApplication.class, args);
 	}

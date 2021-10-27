@@ -15,10 +15,11 @@ public class Song {
 
 	/**
 	 * Song constructor
-	 * @param id id int
-	 * @param title Song title String
-	 * @param artist Artist Name String
-	 * @param label Label Name String
+	 *
+	 * @param id       id int
+	 * @param title    Song title String
+	 * @param artist   Artist Name String
+	 * @param label    Label Name String
 	 * @param released Release Year int
 	 */
 	public Song(@NonNull int id, @NonNull String title, @NonNull String artist, @NonNull String label, @NonNull int released) {
@@ -70,11 +71,12 @@ public class Song {
 	}
 
 	public boolean anyNull() {
-		return id == 0 || title == null || artist == null || label == null || released == 0 ;
+		return id == 0 || title == null || artist == null || label == null || released == 0;
 	}
 
 	/**
 	 * custom to String
+	 *
 	 * @return String
 	 */
 	@Override

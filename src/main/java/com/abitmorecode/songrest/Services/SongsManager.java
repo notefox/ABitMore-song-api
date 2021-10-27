@@ -11,14 +11,18 @@ public interface SongsManager {
 
 	/**
 	 * getter for a specific song in list
+	 *
 	 * @param id id of Song
+	 *
 	 * @return Song searched for
+	 *
 	 * @throws SongDoesntExistException thrown, if id isn't used by a Song
 	 */
 	Song getSpecificSong(int id) throws SongDoesntExistException;
 
 	/**
 	 * getter for all Songs
+	 *
 	 * @return List of all songs
 	 */
 	List<Song> getAllSongs();
@@ -34,9 +38,11 @@ public interface SongsManager {
 
 	/**
 	 * adds a Song Object
+	 *
 	 * @param song Song
+	 *
 	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException thrown, if song id, if given, already exists
+	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
 	 */
 	void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException;
 
@@ -50,7 +56,9 @@ public interface SongsManager {
 
 	/**
 	 * deletes a Song over id
+	 *
 	 * @param id id int
+	 *
 	 * @throws SongDoesntExistException thrown, if Song with id doesn't exist
 	 */
 	void deleteSong(int id) throws SongDoesntExistException;

@@ -54,7 +54,7 @@ public class SongService implements SongsManager {
 	 *
 	 * @param filepath file path to json file
 	 *
-	 * @throws IOException                 thrown, if file doesn't exist or file can't be read
+	 * @throws IOException thrown, if file doesn't exist or file can't be read
 	 */
 	public void init(String filepath) throws IOException {
 		// load in string
@@ -78,8 +78,7 @@ public class SongService implements SongsManager {
 		// remove any Song with null in parameters
 		List<Song> nullList = Arrays.stream(loadedIn).filter(Song::anyNull).collect(Collectors.toList());
 		List<Song> clonedList = Arrays.stream(loadedIn).collect(Collectors.toList());
-		nullList.forEach(s -> log.warn(s.hashCode() + " has at least one null parameter and therefore cannot be " +
-				"initialized and will be remove from the innit list"));
+		nullList.forEach(s -> log.warn(s.toString() + " was not added due to at least one 'null' parameter"));
 		clonedList.removeAll(nullList);
 
 		// set the cleaned List as the officially running Song List
@@ -114,9 +113,11 @@ public class SongService implements SongsManager {
 
 	/**
 	 * adds a Song Object
+	 *
 	 * @param song Song
+	 *
 	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException thrown, if song id, if given, already exists
+	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
 	 */
 	@Override
 	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {

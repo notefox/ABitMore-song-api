@@ -1,8 +1,6 @@
 package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
-import com.abitmorecode.songrest.Services.SongService;
-import com.abitmorecode.songrest.Services.SongsManager;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
 import com.google.gson.JsonParseException;
@@ -77,6 +75,7 @@ class SongServiceTest {
 	@Test
 	void fileHasWrongJsonInItTest() {
 		SongService songService = new SongService();
+		songService.reset();
 		try {
 			songService.init(weirdpath);
 		} catch (IOException e) {

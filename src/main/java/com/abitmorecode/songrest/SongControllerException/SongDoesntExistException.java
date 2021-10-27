@@ -1,6 +1,6 @@
 package com.abitmorecode.songrest.SongControllerException;
 
-public class SongDoesntExistException extends Exception{
+public class SongDoesntExistException extends Exception {
 	public SongDoesntExistException() {
 		super();
 	}
