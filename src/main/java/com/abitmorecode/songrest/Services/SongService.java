@@ -46,13 +46,6 @@ public class SongService implements SongsManager {
 	}
 
 	/**
-	 * constructor with optional filepath
-	 */
-	public SongService(String filepath) throws IOException {
-		init(filepath);
-	}
-
-	/**
 	 * init a json via a file (filepath)
 	 * <p>
 	 * on corrupted/malformed json, it will either ignore it/throw an error it if the file still
