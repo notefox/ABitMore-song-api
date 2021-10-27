@@ -70,21 +70,21 @@ public class SongService implements SongsManager {
 		// format Json into Array of Songs
 		Song[] loadedIn;
 		// init empty array, if no object was found / loaded in
-		// TODO: use Logger to inform about that
 		if ((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
+			log.warn("no jsons found to load in from file: " + filepath);
 			loadedIn = new Song[]{};
 		}
 
 		// remove any Song with null in parameters
-		// TODO: use Logger to inform about that
 		List<Song> nullList = Arrays.stream(loadedIn).filter(Song::anyNull).collect(Collectors.toList());
 		List<Song> clonedList = Arrays.stream(loadedIn).collect(Collectors.toList());
+		nullList.forEach(s -> log.warn(s.hashCode() + " has at least one null parameter and therefore cannot be " +
+				"initialized and will be remove from the innit list"));
 		clonedList.removeAll(nullList);
 
 		// set the cleaned List as the officially running Song List
 		songs.addAll(clonedList);
-
-		// set init tag to true
+		log.info(clonedList.size() + " Songs initialized");
 	}
 
 	@Override
@@ -109,6 +109,7 @@ public class SongService implements SongsManager {
 		synchronized (songs) {
 			songs.add(newSong);
 		}
+		log.info(newSong.getTitle() + " was added");
 	}
 
 	/**
@@ -129,6 +130,7 @@ public class SongService implements SongsManager {
 		synchronized (songs) {
 			songs.add(song);
 		}
+		log.info(song.getTitle() + " was added");
 	}
 
 
@@ -145,14 +147,17 @@ public class SongService implements SongsManager {
 		synchronized (songs) {
 			songs.add(song);
 		}
+		log.info(song.getTitle() + " was added");
 	}
 
 	@Override
 	public void deleteSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
+			Song song = songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			synchronized (songs) {
-				songs.remove((Song) songs.stream().filter(s -> s.getId() == id));
+				songs.remove(song);
 			}
+			log.info(song.getTitle() + " was removed");
 		}
 		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
 	}
@@ -163,6 +168,7 @@ public class SongService implements SongsManager {
 		synchronized (songs) {
 			songs.removeAll(List.of(allSongs));
 		}
+		log.info("song list got cleared");
 	}
 
 	/**
