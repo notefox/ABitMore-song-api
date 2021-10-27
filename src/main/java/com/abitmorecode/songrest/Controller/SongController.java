@@ -58,6 +58,7 @@ public class SongController {
 		// TODO: HTML response with error code
 		// use ResponseEntity
 		// return new ResponseEntity<>(stuffToReturn, HttpStatus.BAD_REQUEST);
+		// https://www.baeldung.com/spring-response-entity
 		return -1;
 	}
 }
