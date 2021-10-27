@@ -1,5 +1,6 @@
-package com.abitmorecode.songrest;
+package com.abitmorecode;
 
+import com.abitmorecode.songrest.Controller.SongController;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SongrestApplicationTests {
 
-	private static SongrestApplication songrestApplication;
+	private static SongController songController;
 
 	@BeforeAll
 	static void beforeAll() {
-		songrestApplication = new SongrestApplication();
+		songController = new SongController();
 	}
 
 	@Test
