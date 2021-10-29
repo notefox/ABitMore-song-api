@@ -23,13 +23,11 @@ public class SongController {
 	private SongsManager songService;
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
-	public String getSong(@PathVariable int id) {
+	public ResponseEntity<Song> getSong(@PathVariable int id) throws SongDoesntExistException {
 		try {
-			return gson.toJson(songService.getSpecificSong(id));
+			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
 		} catch (SongDoesntExistException e) {
-			// TODO: use Logger
-			e.printStackTrace();
-			return e.toString();
+			throw e;
 		}
 	}
 
