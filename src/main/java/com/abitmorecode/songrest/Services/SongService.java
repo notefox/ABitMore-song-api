@@ -170,9 +170,8 @@ public class SongService implements SongsManager {
 
 	@Override
 	public void reset() {
-		Song[] allSongs = songs.toArray(new Song[]{});
 		synchronized (songs) {
-			songs.removeAll(List.of(allSongs));
+			songs.removeAll(new ArrayList<>(songs));
 		}
 		log.info("song list got cleared");
 	}
