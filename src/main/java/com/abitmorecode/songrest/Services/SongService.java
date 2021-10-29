@@ -164,8 +164,9 @@ public class SongService implements SongsManager {
 				songs.remove(song);
 			}
 			log.info(song.getTitle() + " was removed");
+		}else {
+			throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
 		}
-		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
 	}
 
 	@Override
