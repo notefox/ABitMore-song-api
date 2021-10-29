@@ -89,9 +89,9 @@ public class SongService implements SongsManager {
 
 	@Override
 	public Song getSpecificSong(int id) throws SongDoesntExistException {
-		if (!idAlreadyExist(id)) {
+		if (idAlreadyExist(id)) {
 			synchronized (songs) {
-				return (Song) songs.stream().filter(s -> s.getId() == id);
+				return (Song) songs.stream().filter(s -> s.getId() == id).toArray()[0];
 			}
 		}
 		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
