@@ -24,11 +24,7 @@ public class SongController {
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
 	public ResponseEntity<Song> getSong(@PathVariable int id) throws SongDoesntExistException {
-		try {
-			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
-		} catch (SongDoesntExistException e) {
-			throw e;
-		}
+		return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
 	}
 
 	@GetMapping("/ABitMoreCode/songs")
