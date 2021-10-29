@@ -2,16 +2,18 @@ package com.abitmorecode.songrest.Models;
 
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
+
 /**
  * Song Class
  */
 public class Song {
 
-	private int id;
+	private Integer id;
 	private String title;
 	private String artist;
 	private String label;
-	private int released;
+	private Integer released;
 
 	/**
 	 * Song constructor
@@ -22,7 +24,7 @@ public class Song {
 	 * @param label    Label Name String
 	 * @param released Release Year int
 	 */
-	public Song(@NonNull int id, @NonNull String title, @NonNull String artist, @NonNull String label, @NonNull int released) {
+	public Song(@NonNull Integer id, @NonNull String title, @NonNull String artist, @NonNull String label, @NonNull Integer released) {
 		this.id = id;
 		this.title = title;
 		this.artist = artist;
@@ -71,7 +73,7 @@ public class Song {
 	}
 
 	public boolean anyNull() {
-		return id == 0 || title == null || artist == null || label == null || released == 0;
+		return id == null || title == null || artist == null || label == null || released == null;
 	}
 
 	/**
@@ -93,9 +95,9 @@ public class Song {
 
 		Song song = (Song) o;
 
-		if (id != song.id)
+		if (!id.equals(song.id))
 			return false;
-		if (released != song.released)
+		if (!released.equals(song.released))
 			return false;
 		if (!title.equals(song.title))
 			return false;
