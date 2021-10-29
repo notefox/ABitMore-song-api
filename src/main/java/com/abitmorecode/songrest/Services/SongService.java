@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -82,7 +83,7 @@ public class SongService implements SongsManager {
 		clonedList.removeAll(nullList);
 
 		// set the cleaned List as the officially running Song List
-		songs.addAll(clonedList);
+		songs.addAll(clonedList.stream().sorted(Comparator.comparingInt(Song::getId)).collect(Collectors.toList()));
 		log.info(clonedList.size() + " Songs initialized");
 	}
 
