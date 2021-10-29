@@ -23,9 +23,9 @@ public class SongController {
 	private SongsManager songService;
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
-	public String getSong(@PathVariable int songId) {
+	public String getSong(@PathVariable int id) {
 		try {
-			return gson.toJson(songService.getSpecificSong(songId));
+			return gson.toJson(songService.getSpecificSong(id));
 		} catch (SongDoesntExistException e) {
 			// TODO: use Logger
 			e.printStackTrace();
