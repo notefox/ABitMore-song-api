@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -100,5 +101,11 @@ class SongServiceTest {
 	void addASongWithAutomaticIdAssigment() {
 		SongsManager songService = new SongService();
 		songService.reset();
+	}
+
+	@Test
+	void addIdWhereNoIdWasBeforeTest() {
+		List<String> list = new ArrayList<>();
+		assertThrows(IndexOutOfBoundsException.class, () -> list.add(1, "string"));
 	}
 }
