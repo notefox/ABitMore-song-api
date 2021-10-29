@@ -44,18 +44,8 @@ public class SongController {
 	}
 
 	@DeleteMapping("/ABitMoreCode/songs/{id}")
-	public int deleteSong(@PathVariable int id) {
-		try {
-			songService.deleteSong(id);
-			return id;
-		} catch (SongDoesntExistException | NumberFormatException e) {
-			e.printStackTrace();
-		}
-
-		// TODO: HTML response with error code
-		// use ResponseEntity
-		// return new ResponseEntity<>(stuffToReturn, HttpStatus.BAD_REQUEST);
-		// https://www.baeldung.com/spring-response-entity
-		return -1;
+	public ResponseEntity<Object> deleteSong(@PathVariable int id) throws SongDoesntExistException {
+		songService.deleteSong(id);
+		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 }
