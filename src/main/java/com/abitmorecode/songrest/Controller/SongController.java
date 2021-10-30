@@ -19,12 +19,18 @@ import java.util.List;
 public class SongController {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
 	private static final Gson gson = new Gson();
+
 	@Autowired
 	private SongsManager songService;
 
 	@GetMapping("/ABitMoreCode/songs/{id}")
-	public ResponseEntity<Song> getSong(@PathVariable int id) throws SongDoesntExistException {
-		return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
+	public ResponseEntity<Object> getSong(@PathVariable int id) {
+		try {
+			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
+		} catch (SongDoesntExistException e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/ABitMoreCode/songs")
@@ -33,19 +39,24 @@ public class SongController {
 	}
 
 	@PostMapping("/ABitMoreCode/songs")
-	public Song postSong(@RequestBody Song song) {
+	public ResponseEntity<Object> postSong(@RequestBody Song song) {
 		try {
 			songService.addSong(song);
-			return song;
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
-			e.printStackTrace();
-			return null;
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@DeleteMapping("/ABitMoreCode/songs/{id}")
-	public ResponseEntity<Object> deleteSong(@PathVariable int id) throws SongDoesntExistException {
-		songService.deleteSong(id);
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	public ResponseEntity<Object> deleteSong(@PathVariable int id) {
+		try {
+			songService.deleteSong(id);
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		} catch (SongDoesntExistException e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+		}
 	}
 }
