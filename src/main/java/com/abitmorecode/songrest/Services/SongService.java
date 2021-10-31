@@ -89,6 +89,7 @@ public class SongService implements SongsManager {
 	public Song getSpecificSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
 			synchronized (songs) {
+				//noinspection OptionalGetWithoutIsPresent
 				return songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			}
 		}
@@ -126,6 +127,7 @@ public class SongService implements SongsManager {
 	@Override
 	public void deleteSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
+			//noinspection OptionalGetWithoutIsPresent
 			Song song = songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			synchronized (songs) {
 				songs.remove(song);
@@ -154,6 +156,7 @@ public class SongService implements SongsManager {
 			return 0;
 		}
 		synchronized (songs) {
+			//noinspection OptionalGetWithoutIsPresent
 			return songs.stream().parallel().max((s1, s2) -> Math.max(s1.getId(), s2.getId())).get().getId();
 		}
 	}
