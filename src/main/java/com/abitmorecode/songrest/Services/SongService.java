@@ -102,16 +102,6 @@ public class SongService implements SongsManager {
 		return songs;
 	}
 
-	//@Override
-	public void addSong(String title, String artist, String label, int released) {
-		int id = getLastId() + 1;
-		Song newSong = new Song(id, title, artist, label, released);
-		synchronized (songs) {
-			songs.add(newSong);
-		}
-		log.info(newSong.getTitle() + " was added");
-	}
-
 	/**
 	 * adds a Song Object
 	 *
@@ -122,7 +112,6 @@ public class SongService implements SongsManager {
 	 */
 	@Override
 	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		// check if Song already exist
 		if (songAlreadyExist(song)) {
 			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
 		}
@@ -135,26 +124,6 @@ public class SongService implements SongsManager {
 		log.info(song.getTitle() + " was added");
 	}
 
-
-	//@Override
-	public void addSong(String json) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		Song song = gson.fromJson(json, Song.class);
-		// check if Song already exist
-
-		//noinspection DuplicatedCode
-		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
-		}
-
-		if (idAlreadyExist(song.getId())) {
-			throw new SongIdAlreadyExistException();
-		}
-
-		synchronized (songs) {
-			songs.add(song);
-		}
-		log.info(song.getTitle() + " was added");
-	}
 
 	@Override
 	public void deleteSong(int id) throws SongDoesntExistException {
