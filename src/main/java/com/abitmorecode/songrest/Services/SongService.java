@@ -94,7 +94,7 @@ public class SongService implements SongsManager {
 				return songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			}
 		}
-		throw new SongDoesntExistException("Song with id:" + id + " doesn't exist");
+		throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class SongService implements SongsManager {
 	@Override
 	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
 		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
+			throw new SameSongAlreadyExistException("the song: " + song.getTitle() + " already exist");
 		}
 		if (idAlreadyExist(song.getId())) {
 			throw new SongIdAlreadyExistException();
@@ -134,7 +134,7 @@ public class SongService implements SongsManager {
 			}
 			log.info(song.getTitle() + " was removed");
 		}else {
-			throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
+			throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 		}
 	}
 
