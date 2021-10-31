@@ -1,7 +1,6 @@
 package com.abitmorecode.songrest.SongControllerException;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value= HttpStatus.CONFLICT, reason="song already exists")
