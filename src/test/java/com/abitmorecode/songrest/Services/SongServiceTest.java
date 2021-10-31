@@ -1,6 +1,7 @@
 package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
 import com.google.gson.JsonParseException;
@@ -91,7 +92,7 @@ class SongServiceTest {
 		songService.reset();
 		try {
 			songService.addSong(new Song(1, "Das Test", "N bisschen Test", "TestTestTest", 2015));
-		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
+		} catch (NoIdAvailableException e) {
 			fail();
 		}
 		assertEquals(new Song(1, "Das Test", "N bisschen Test", "TestTestTest", 2015), songService.getAllSongs().stream().findFirst().get());
