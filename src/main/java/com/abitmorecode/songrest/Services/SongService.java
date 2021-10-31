@@ -61,9 +61,7 @@ public class SongService implements SongsManager {
 		// load in string
 		Stream<String> linesStream = Files.lines(Path.of(filepath));
 		AtomicReference<String> allLines = new AtomicReference<>("");
-		Arrays.stream(linesStream.toArray()).forEach((line) -> {
-			allLines.updateAndGet(v -> v + line);
-		});
+		Arrays.stream(linesStream.toArray()).forEach((line) -> allLines.updateAndGet(v -> v + line));
 
 		// remove all the spaces
 		String lines = allLines.get().replaceAll("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)", "");
