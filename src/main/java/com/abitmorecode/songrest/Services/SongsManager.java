@@ -1,6 +1,7 @@
 package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
@@ -35,7 +36,7 @@ public interface SongsManager {
 	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
 	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
 	 */
-	void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException;
+	void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException, NoIdAvailableException;
 
 	/**
 	 * deletes a Song over id

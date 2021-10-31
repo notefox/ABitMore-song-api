@@ -2,6 +2,7 @@ package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Controller.SongController;
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
@@ -106,20 +107,16 @@ public class SongService implements SongsManager {
 	 *
 	 * @param song Song
 	 *
-	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
+	 * @throws NoIdAvailableException if there is no unused positive integer id
 	 */
 	@Override
-	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song.getTitle() + " already exist");
-		}
-		if (idAlreadyExist(song.getId())) {
-			throw new SongIdAlreadyExistException();
-		}
+	public void addSong(Song song) throws NoIdAvailableException {
+		song.setId(getFirstUnusedId());
+
 		synchronized (songs) {
 			songs.add(song);
 		}
+
 		log.info(song.getTitle() + " was added");
 	}
 
@@ -168,9 +165,9 @@ public class SongService implements SongsManager {
 	 * 	<li>there exists no song with an id equal to the returned integer</li>
 	 * </ul>
 	 * @return first unused song id
-	 * @throws IndexOutOfBoundsException if there is no positive Integer not already used as song id
+	 * @throws NoIdAvailableException if there is no positive Integer not already used as song id
 	 */
-	private int getFirstUnusedId() throws IndexOutOfBoundsException{
+	private int getFirstUnusedId() throws NoIdAvailableException {
 		int id = -1;
 		boolean isAvailable = false;
 
@@ -185,7 +182,7 @@ public class SongService implements SongsManager {
 				}
 			}
 
-			if(id == Integer.MAX_VALUE)throw new IndexOutOfBoundsException("No unused song id available");
+			if(id == Integer.MAX_VALUE)throw new NoIdAvailableException("No unused song id available");
 		}
 
 		return id;
