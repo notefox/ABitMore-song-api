@@ -42,7 +42,7 @@ public class SongController {
 	public ResponseEntity<Object> postSong(@RequestBody Song song) {
 		try {
 			songService.addSong(song);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
@@ -53,7 +53,7 @@ public class SongController {
 	public ResponseEntity<Object> deleteSong(@PathVariable int id) {
 		try {
 			songService.deleteSong(id);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (SongDoesntExistException e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
