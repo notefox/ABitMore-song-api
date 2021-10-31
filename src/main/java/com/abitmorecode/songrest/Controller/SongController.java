@@ -9,10 +9,13 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -33,14 +36,14 @@ public class SongController {
 	}
 
 	@PostMapping("/ABitMoreCode/songs")
-	public Song postSong(@RequestBody Song song) {
-		try {
-			songService.addSong(song);
-			return song;
-		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
-			e.printStackTrace();
-			return null;
-		}
+	public ResponseEntity<?> postSong(@RequestBody Song song) throws SongIdAlreadyExistException, SameSongAlreadyExistException {
+		songService.addSong(song);
+		String location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(song.getId())
+				.toUriString();
+		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 
 	@DeleteMapping("/ABitMoreCode/songs/{id}")
