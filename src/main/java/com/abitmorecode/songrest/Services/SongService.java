@@ -61,9 +61,7 @@ public class SongService implements SongsManager {
 		// load in string
 		Stream<String> linesStream = Files.lines(Path.of(filepath));
 		AtomicReference<String> allLines = new AtomicReference<>("");
-		Arrays.stream(linesStream.toArray()).forEach((line) -> {
-			allLines.updateAndGet(v -> v + line);
-		});
+		Arrays.stream(linesStream.toArray()).forEach((line) -> allLines.updateAndGet(v -> v + line));
 
 		// remove all the spaces
 		String lines = allLines.get().replaceAll("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)", "");
@@ -72,7 +70,7 @@ public class SongService implements SongsManager {
 		Song[] loadedIn;
 		// init empty array, if no object was found / loaded in
 		if ((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
-			log.warn("no jsons found to load in from file: " + filepath);
+			log.warn("no jsons found to load in from file: " + filepath + ", no songs where found");
 			loadedIn = new Song[]{};
 		}
 
@@ -91,25 +89,16 @@ public class SongService implements SongsManager {
 	public Song getSpecificSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
 			synchronized (songs) {
-				return (Song) songs.stream().filter(s -> s.getId() == id).toArray()[0];
+				//noinspection OptionalGetWithoutIsPresent
+				return songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			}
 		}
-		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
+		throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 	}
 
 	@Override
 	public List<Song> getAllSongs() {
 		return songs;
-	}
-
-	//@Override
-	public void addSong(String title, String artist, String label, int released) {
-		int id = getLastId() + 1;
-		Song newSong = new Song(id, title, artist, label, released);
-		synchronized (songs) {
-			songs.add(newSong);
-		}
-		log.info(newSong.getTitle() + " was added");
 	}
 
 	/**
@@ -122,9 +111,8 @@ public class SongService implements SongsManager {
 	 */
 	@Override
 	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		// check if Song already exist
 		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
+			throw new SameSongAlreadyExistException("the song: " + song.getTitle() + " already exist");
 		}
 		if (idAlreadyExist(song.getId())) {
 			throw new SongIdAlreadyExistException();
@@ -135,37 +123,18 @@ public class SongService implements SongsManager {
 		log.info(song.getTitle() + " was added");
 	}
 
-
-	//@Override
-	public void addSong(String json) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		Song song = gson.fromJson(json, Song.class);
-		// check if Song already exist
-
-		//noinspection DuplicatedCode
-		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
-		}
-
-		if (idAlreadyExist(song.getId())) {
-			throw new SongIdAlreadyExistException();
-		}
-
-		synchronized (songs) {
-			songs.add(song);
-		}
-		log.info(song.getTitle() + " was added");
-	}
 
 	@Override
 	public void deleteSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
+			//noinspection OptionalGetWithoutIsPresent
 			Song song = songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			synchronized (songs) {
 				songs.remove(song);
 			}
 			log.info(song.getTitle() + " was removed");
 		}else {
-			throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
+			throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 		}
 	}
 
@@ -187,6 +156,7 @@ public class SongService implements SongsManager {
 			return 0;
 		}
 		synchronized (songs) {
+			//noinspection OptionalGetWithoutIsPresent
 			return songs.stream().parallel().max((s1, s2) -> Math.max(s1.getId(), s2.getId())).get().getId();
 		}
 	}

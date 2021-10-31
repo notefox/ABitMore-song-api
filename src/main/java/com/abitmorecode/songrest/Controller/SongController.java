@@ -5,7 +5,6 @@ import com.abitmorecode.songrest.Services.SongsManager;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +18,29 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/ABitMoreCode")
 public class SongController {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
-	private static final Gson gson = new Gson();
+
 	@Autowired
 	private SongsManager songService;
 
-	@GetMapping("/ABitMoreCode/songs/{id}")
-	public ResponseEntity<Song> getSong(@PathVariable int id) throws SongDoesntExistException {
-		return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
+	@GetMapping("/songs/{id}")
+	public ResponseEntity<Object> getSong(@PathVariable int id) {
+		try {
+			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
+		} catch (SongDoesntExistException e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@GetMapping("/ABitMoreCode/songs")
+	@GetMapping("/songs")
 	public ResponseEntity<List<Song>> getSongs() {
 		return new ResponseEntity<>(songService.getAllSongs(), HttpStatus.OK);
 	}
 
-	@PostMapping("/ABitMoreCode/songs")
+	@PostMapping("/songs")
 	public ResponseEntity<?> postSong(@RequestBody Song song) throws SongIdAlreadyExistException, SameSongAlreadyExistException {
 		songService.addSong(song);
 		String location = ServletUriComponentsBuilder
@@ -46,9 +51,14 @@ public class SongController {
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 
-	@DeleteMapping("/ABitMoreCode/songs/{id}")
-	public ResponseEntity<Object> deleteSong(@PathVariable int id) throws SongDoesntExistException {
-		songService.deleteSong(id);
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	@DeleteMapping("/songs/{id}")
+	public ResponseEntity<Object> deleteSong(@PathVariable int id) {
+		try {
+			songService.deleteSong(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (SongDoesntExistException e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 }
