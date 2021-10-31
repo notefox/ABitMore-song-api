@@ -192,6 +192,36 @@ public class SongService implements SongsManager {
 	}
 
 	/**
+	 * returns the smallest Integer which meets the following criteria:
+	 * <ul>
+	 * 	<li>is bigger or equal to 0</li>
+	 * 	<li>there exists no song with an id equal to the returned integer</li>
+	 * </ul>
+	 * @return first unused song id
+	 * @throws IndexOutOfBoundsException if there is no positive Integer not already used as song id
+	 */
+	private int getFirstUnusedId() throws IndexOutOfBoundsException{
+		int id = -1;
+		boolean isAvailable = false;
+
+		while(!isAvailable){
+			isAvailable = true;
+			id++;
+
+			for(Song song: songs){
+				if(song.getId() == id){
+					isAvailable = false;
+					break;
+				}
+			}
+
+			if(id == Integer.MAX_VALUE)throw new IndexOutOfBoundsException("No unused song id available");
+		}
+
+		return id;
+	}
+
+	/**
 	 * gives back a boolean, if id already exist in Song List
 	 *
 	 * @param id int id
