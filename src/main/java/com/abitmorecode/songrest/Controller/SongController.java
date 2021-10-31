@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/ABitMoreCode")
 public class SongController {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
-	private static final Gson gson = new Gson();
 
 	@Autowired
 	private SongsManager songService;
