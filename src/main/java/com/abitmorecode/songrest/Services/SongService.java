@@ -72,7 +72,7 @@ public class SongService implements SongsManager {
 		Song[] loadedIn;
 		// init empty array, if no object was found / loaded in
 		if ((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
-			log.warn("no jsons found to load in from file: " + filepath);
+			log.warn("no jsons found to load in from file: " + filepath + ", no songs where found");
 			loadedIn = new Song[]{};
 		}
 
@@ -94,7 +94,7 @@ public class SongService implements SongsManager {
 				return songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			}
 		}
-		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
+		throw new SongDoesntExistException("Song with id:" + id + " doesn't exist");
 	}
 
 	@Override
