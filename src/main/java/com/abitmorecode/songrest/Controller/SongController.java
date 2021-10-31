@@ -2,6 +2,7 @@ package com.abitmorecode.songrest.Controller;
 
 import com.abitmorecode.songrest.Models.Song;
 import com.abitmorecode.songrest.Services.SongsManager;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
@@ -41,7 +42,7 @@ public class SongController {
 	}
 
 	@PostMapping("/songs")
-	public ResponseEntity<?> postSong(@RequestBody Song song) throws SongIdAlreadyExistException, SameSongAlreadyExistException {
+	public ResponseEntity<?> postSong(@RequestBody Song song) throws NoIdAvailableException{
 		songService.addSong(song);
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()

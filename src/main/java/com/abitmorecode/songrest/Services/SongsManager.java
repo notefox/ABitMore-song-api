@@ -33,10 +33,9 @@ public interface SongsManager {
 	 *
 	 * @param song Song
 	 *
-	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
+	 * @throws NoIdAvailableException thrown, if there is no unused positive integer id available
 	 */
-	void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException, NoIdAvailableException;
+	void addSong(Song song) throws NoIdAvailableException;
 
 	/**
 	 * deletes a Song over id
