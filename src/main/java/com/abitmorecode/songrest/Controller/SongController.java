@@ -23,7 +23,7 @@ public class SongController {
 	@Autowired
 	private SongsManager songService;
 
-	@GetMapping("/ABitMoreCode/songs/{id}")
+	@GetMapping("/songs/{id}")
 	public ResponseEntity<Object> getSong(@PathVariable int id) {
 		try {
 			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
@@ -33,12 +33,12 @@ public class SongController {
 		}
 	}
 
-	@GetMapping("/ABitMoreCode/songs")
+	@GetMapping("/songs")
 	public ResponseEntity<List<Song>> getSongs() {
 		return new ResponseEntity<>(songService.getAllSongs(), HttpStatus.OK);
 	}
 
-	@PostMapping("/ABitMoreCode/songs")
+	@PostMapping("/songs")
 	public ResponseEntity<Object> postSong(@RequestBody Song song) {
 		try {
 			songService.addSong(song);
@@ -49,7 +49,7 @@ public class SongController {
 		}
 	}
 
-	@DeleteMapping("/ABitMoreCode/songs/{id}")
+	@DeleteMapping("/songs/{id}")
 	public ResponseEntity<Object> deleteSong(@PathVariable int id) {
 		try {
 			songService.deleteSong(id);
