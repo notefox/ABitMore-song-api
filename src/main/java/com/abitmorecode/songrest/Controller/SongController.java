@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/ABitMoreCode")
 public class SongController {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
 	private static final Gson gson = new Gson();
