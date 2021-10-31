@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SongController {
 			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
 		} catch (SongDoesntExistException e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -45,7 +46,7 @@ public class SongController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -56,7 +57,7 @@ public class SongController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (SongDoesntExistException e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }
