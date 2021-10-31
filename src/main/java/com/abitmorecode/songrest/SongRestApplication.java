@@ -11,6 +11,7 @@ public class SongRestApplication {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
 
 	public static void main(String[] args) {
+		log.info("server start");
 		SpringApplication.run(SongRestApplication.class, args);
 	}
 }
