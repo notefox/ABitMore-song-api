@@ -2,66 +2,61 @@ package com.abitmorecode.songrest.Controller;
 
 import com.abitmorecode.songrest.Models.Song;
 import com.abitmorecode.songrest.Services.SongsManager;
-import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
-import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/ABitMoreCode")
 public class SongController {
 	private static final Logger log = LoggerFactory.getLogger(SongController.class);
-	private static final Gson gson = new Gson();
+
 	@Autowired
 	private SongsManager songService;
 
-	@GetMapping("/ABitMoreCode/songs/{id}")
-	public String getSong(@PathVariable int songId) {
+	@GetMapping("/songs/{id}")
+	public ResponseEntity<Object> getSong(@PathVariable int id) {
 		try {
-			return gson.toJson(songService.getSpecificSong(songId));
+			return new ResponseEntity<>(songService.getSpecificSong(id), HttpStatus.OK);
 		} catch (SongDoesntExistException e) {
-			// TODO: use Logger
-			e.printStackTrace();
-			return e.toString();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@GetMapping("/ABitMoreCode/songs")
+	@GetMapping("/songs")
 	public ResponseEntity<List<Song>> getSongs() {
 		return new ResponseEntity<>(songService.getAllSongs(), HttpStatus.OK);
 	}
 
-	@PostMapping("/ABitMoreCode/songs")
-	public Song postSong(@RequestBody Song song) {
-		try {
-			songService.addSong(song);
-			return song;
-		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
-			e.printStackTrace();
-			return null;
-		}
+	@PostMapping("/songs")
+	public ResponseEntity<?> postSong(@RequestBody Song song) throws NoIdAvailableException{
+		songService.addSong(song);
+		String location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(song.getId())
+				.toUriString();
+		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 
-	@DeleteMapping("/ABitMoreCode/songs/{id}")
-	public int deleteSong(@PathVariable int id) {
+	@DeleteMapping("/songs/{id}")
+	public ResponseEntity<Object> deleteSong(@PathVariable int id) {
 		try {
 			songService.deleteSong(id);
-			return id;
-		} catch (SongDoesntExistException | NumberFormatException e) {
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (SongDoesntExistException e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-
-		// TODO: HTML response with error code
-		// use ResponseEntity
-		// return new ResponseEntity<>(stuffToReturn, HttpStatus.BAD_REQUEST);
-		// https://www.baeldung.com/spring-response-entity
-		return -1;
 	}
 }

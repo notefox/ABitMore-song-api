@@ -1,6 +1,7 @@
 package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
 import com.google.gson.JsonParseException;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,7 +92,7 @@ class SongServiceTest {
 		songService.reset();
 		try {
 			songService.addSong(new Song(1, "Das Test", "N bisschen Test", "TestTestTest", 2015));
-		} catch (SameSongAlreadyExistException | SongIdAlreadyExistException e) {
+		} catch (NoIdAvailableException e) {
 			fail();
 		}
 		assertEquals(new Song(1, "Das Test", "N bisschen Test", "TestTestTest", 2015), songService.getAllSongs().stream().findFirst().get());
@@ -100,5 +102,11 @@ class SongServiceTest {
 	void addASongWithAutomaticIdAssigment() {
 		SongsManager songService = new SongService();
 		songService.reset();
+	}
+
+	@Test
+	void addIdWhereNoIdWasBeforeTest() {
+		List<String> list = new ArrayList<>();
+		assertThrows(IndexOutOfBoundsException.class, () -> list.add(1, "string"));
 	}
 }

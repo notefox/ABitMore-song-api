@@ -1,6 +1,7 @@
 package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
@@ -28,31 +29,13 @@ public interface SongsManager {
 	List<Song> getAllSongs();
 
 	/**
-	 * adds a Song with automatic id init
-	 * @param title title for Song
-	 * @param artist Artist of Song
-	 * @param label Label of Song
-	 * @param released Song Release Year
-	 */
-	//void addSong(String title, String artist, String label, int released);
-
-	/**
 	 * adds a Song Object
 	 *
 	 * @param song Song
 	 *
-	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
+	 * @throws NoIdAvailableException thrown, if there is no unused positive integer id available
 	 */
-	void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException;
-
-	/**
-	 * adds a Song over Json
-	 * @param json Json String
-	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException thrown, if the song id, if given, already exists
-	 */
-	//void addSong(String json) throws SameSongAlreadyExistException, SongIdAlreadyExistException;
+	void addSong(Song song) throws NoIdAvailableException;
 
 	/**
 	 * deletes a Song over id

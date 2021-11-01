@@ -2,6 +2,7 @@ package com.abitmorecode.songrest.Services;
 
 import com.abitmorecode.songrest.Controller.SongController;
 import com.abitmorecode.songrest.Models.Song;
+import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
 import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
 import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -60,18 +62,16 @@ public class SongService implements SongsManager {
 		// load in string
 		Stream<String> linesStream = Files.lines(Path.of(filepath));
 		AtomicReference<String> allLines = new AtomicReference<>("");
-		Arrays.stream(linesStream.toArray()).forEach((line) -> {
-			allLines.updateAndGet(v -> v + line);
-		});
+		Arrays.stream(linesStream.toArray()).forEach((line) -> allLines.updateAndGet(v -> v + line));
 
 		// remove all the spaces
 		String lines = allLines.get().replaceAll("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)", "");
 
 		// format Json into Array of Songs
 		Song[] loadedIn;
-		// init empty array, if no object was found / loaded in
+		// init empty array, if no object/s was/were found / loaded in
 		if ((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
-			log.warn("no jsons found to load in from file: " + filepath);
+			log.warn("no jsons found to load in from file: " + filepath + ", no songs where found");
 			loadedIn = new Song[]{};
 		}
 
@@ -82,18 +82,19 @@ public class SongService implements SongsManager {
 		clonedList.removeAll(nullList);
 
 		// set the cleaned List as the officially running Song List
-		songs.addAll(clonedList);
+		songs.addAll(clonedList.stream().sorted(Comparator.comparingInt(Song::getId)).collect(Collectors.toList()));
 		log.info(clonedList.size() + " Songs initialized");
 	}
 
 	@Override
 	public Song getSpecificSong(int id) throws SongDoesntExistException {
-		if (!idAlreadyExist(id)) {
+		if (idAlreadyExist(id)) {
 			synchronized (songs) {
-				return (Song) songs.stream().filter(s -> s.getId() == id);
+				//noinspection OptionalGetWithoutIsPresent
+				return songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			}
 		}
-		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
+		throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 	}
 
 	@Override
@@ -101,77 +102,47 @@ public class SongService implements SongsManager {
 		return songs;
 	}
 
-	//@Override
-	public void addSong(String title, String artist, String label, int released) {
-		int id = getLastId() + 1;
-		Song newSong = new Song(id, title, artist, label, released);
-		synchronized (songs) {
-			songs.add(newSong);
-		}
-		log.info(newSong.getTitle() + " was added");
-	}
-
 	/**
 	 * adds a Song Object
 	 *
 	 * @param song Song
 	 *
-	 * @throws SameSongAlreadyExistException thrown, if the same Song already exist locally and is saved in here
-	 * @throws SongIdAlreadyExistException   thrown, if song id, if given, already exists
+	 * @throws NoIdAvailableException if there is no unused positive integer id
 	 */
 	@Override
-	public void addSong(Song song) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		// check if Song already exist
-		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
-		}
+	public void addSong(Song song) throws NoIdAvailableException {
 		if (idAlreadyExist(song.getId())) {
-			throw new SongIdAlreadyExistException();
-		}
-		synchronized (songs) {
-			songs.add(song);
-		}
-		log.info(song.getTitle() + " was added");
-	}
-
-
-	//@Override
-	public void addSong(String json) throws SameSongAlreadyExistException, SongIdAlreadyExistException {
-		Song song = gson.fromJson(json, Song.class);
-		// check if Song already exist
-
-		//noinspection DuplicatedCode
-		if (songAlreadyExist(song)) {
-			throw new SameSongAlreadyExistException("the song: " + song + " already exist");
-		}
-
-		if (idAlreadyExist(song.getId())) {
-			throw new SongIdAlreadyExistException();
+			int newId = getFirstUnusedId();
+			song.setId(newId);
+			log.warn("tried to add song with id: " + song.getId() + " wich is already in use, gonna use " + newId + " instead");
 		}
 
 		synchronized (songs) {
 			songs.add(song);
 		}
+
 		log.info(song.getTitle() + " was added");
 	}
+
 
 	@Override
 	public void deleteSong(int id) throws SongDoesntExistException {
 		if (idAlreadyExist(id)) {
+			//noinspection OptionalGetWithoutIsPresent
 			Song song = songs.stream().filter(s -> s.getId() == id).findFirst().get();
 			synchronized (songs) {
 				songs.remove(song);
 			}
 			log.info(song.getTitle() + " was removed");
+		}else {
+			throw new SongDoesntExistException("Song with id: " + id + " doesn't exist");
 		}
-		throw new SongDoesntExistException("Song with id:" + id + "doesn't exist");
 	}
 
 	@Override
 	public void reset() {
-		Song[] allSongs = songs.toArray(new Song[]{});
 		synchronized (songs) {
-			songs.removeAll(List.of(allSongs));
+			songs.removeAll(new ArrayList<>(songs));
 		}
 		log.info("song list got cleared");
 	}
@@ -186,8 +157,39 @@ public class SongService implements SongsManager {
 			return 0;
 		}
 		synchronized (songs) {
+			//noinspection OptionalGetWithoutIsPresent
 			return songs.stream().parallel().max((s1, s2) -> Math.max(s1.getId(), s2.getId())).get().getId();
 		}
+	}
+
+	/**
+	 * returns the smallest Integer which meets the following criteria:
+	 * <ul>
+	 * 	<li>is bigger or equal to 0</li>
+	 * 	<li>there exists no song with an id equal to the returned integer</li>
+	 * </ul>
+	 * @return first unused song id
+	 * @throws NoIdAvailableException if there is no positive Integer not already used as song id
+	 */
+	private int getFirstUnusedId() throws NoIdAvailableException {
+		int id = -1;
+		boolean isAvailable = false;
+
+		while(!isAvailable){
+			isAvailable = true;
+			id++;
+
+			for(Song song: songs){
+				if(song.getId() == id){
+					isAvailable = false;
+					break;
+				}
+			}
+
+			if(id == Integer.MAX_VALUE)throw new NoIdAvailableException("No unused song id available");
+		}
+
+		return id;
 	}
 
 	/**
