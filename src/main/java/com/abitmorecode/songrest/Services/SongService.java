@@ -111,7 +111,11 @@ public class SongService implements SongsManager {
 	 */
 	@Override
 	public void addSong(Song song) throws NoIdAvailableException {
-		song.setId(getFirstUnusedId());
+		if (idAlreadyExist(song.getId())) {
+			int newId = getFirstUnusedId();
+			song.setId(newId);
+			log.warn("tried to add song with id: " + song.getId() + " wich is already in use, gonna use " + newId + " instead");
+		}
 
 		synchronized (songs) {
 			songs.add(song);
