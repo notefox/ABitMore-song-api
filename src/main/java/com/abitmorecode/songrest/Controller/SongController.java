@@ -3,9 +3,7 @@ package com.abitmorecode.songrest.Controller;
 import com.abitmorecode.songrest.Models.Song;
 import com.abitmorecode.songrest.Services.SongsManager;
 import com.abitmorecode.songrest.SongControllerException.NoIdAvailableException;
-import com.abitmorecode.songrest.SongControllerException.SameSongAlreadyExistException;
 import com.abitmorecode.songrest.SongControllerException.SongDoesntExistException;
-import com.abitmorecode.songrest.SongControllerException.SongIdAlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
