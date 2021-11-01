@@ -39,7 +39,7 @@ public class SongController {
 	}
 
 	@PostMapping("/songs")
-	public ResponseEntity<?> postSong(@RequestBody Song song) throws NoIdAvailableException{
+	public ResponseEntity<Object> postSong(@RequestBody Song song) throws NoIdAvailableException{
 		songService.addSong(song);
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
