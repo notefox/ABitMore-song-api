@@ -69,7 +69,7 @@ public class SongService implements SongsManager {
 
 		// format Json into Array of Songs
 		Song[] loadedIn;
-		// init empty array, if no object was found / loaded in
+		// init empty array, if no object/s was/were found / loaded in
 		if ((loadedIn = gson.fromJson(lines, Song[].class)) == null) {
 			log.warn("no jsons found to load in from file: " + filepath + ", no songs where found");
 			loadedIn = new Song[]{};
